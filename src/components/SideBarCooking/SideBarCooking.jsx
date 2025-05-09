@@ -1,12 +1,18 @@
+import Count from "../Count/Count";
 
-const SideBarCooking = () => {
+const SideBarCooking = ({ cooking,idx }) => {
+    const { name, calories, time } = cooking;
+    
     return (
-        <tr>
-            <td className="p-2" colSpan={1}>1</td>
-            <td className="p-2" colSpan={1}>Spaghetti Bolognese</td>
-            <td className="p-2" colSpan={1}>30 minutes</td>
-            <td className="p-2" colSpan={1}>600 calories</td>
-        </tr>
+        <tbody>
+            <tr>
+                <td className="p-2" colSpan={1}>{idx+1}</td>
+                <td className="p-2" colSpan={1}>{name}</td>
+                <td className="p-2" colSpan={1}>{time} minutes</td>
+                <td className="p-2" colSpan={1}>{calories} calories</td>
+            </tr>
+            
+        </tbody>
     );
 };
 

@@ -1,10 +1,36 @@
+import { useState } from "react";
 import SideBarCook from "../SideBarCook/SideBarCook";
 import SideBarCooking from "../SideBarCooking/SideBarCooking";
+import { toast, ToastContainer } from "react-toastify";
+import Count from "../Count/Count";
 
 
 const SideBar = ({ exploreCard }) => {
 
-    const handleCooking=()=>{
+    const [cook, setCook] = useState([]);
+    const [counts, setCounts] = useState([]);
+    const [timeCount,setTimeCount]=useState(0);
+    const [caloriesCount,setCaloriesCount]=useState(0);
+
+
+    const handleCooking = (name, calories, time) => {
+        if (cook.find(data => data.name === name)) {
+            toast('Already cooking');
+        }
+        else {
+            setCook([...cook, { name: name, calories: calories, time: time }]);
+        }
+    }
+
+    function handleCount(calories,time){
+        if(counts.find(count=>count.calories===calories)){
+            toast('Already Prepering')
+        }
+        else{
+            setCounts([...counts,{calories:calories,time:time}]);
+            setTimeCount(timeCount+time);
+            setCaloriesCount(caloriesCount+calories);
+        }
         
     }
 
@@ -23,11 +49,11 @@ const SideBar = ({ exploreCard }) => {
                 </tr>
 
                 {
-                    exploreCard.map(data => <SideBarCook data={data}></SideBarCook>)
+                    exploreCard.map((data,idx) => <SideBarCook handleCooking={handleCooking} data={data} idx={idx} handleCount={handleCount}></SideBarCook>)
                 }
             </table>
 
-            <h3 className="text-gray-900 text-2xl font-bold mt-8">Currently Cooking: 01</h3>
+            <h3 className="text-gray-900 text-2xl font-bold mt-8">Currently Cooking: {counts.length}</h3>
             <hr className="mx-20 shadow shadow-gray-700/50" />
 
             <table className="w-full">
@@ -37,19 +63,14 @@ const SideBar = ({ exploreCard }) => {
                     <th className="p-2" colSpan={1}>Time</th>
                     <th className="p-2" colSpan={1}>Calories</th>
                 </tr>
-                <tbody>
-                    <SideBarCooking></SideBarCooking>
-                    <tr>
-                        <td className="p-2" colSpan={1}></td>
-                        <td className="p-2" colSpan={1}></td>
-                        <td className="p-2" colSpan={1}>Total Time = <br />
-                            45 minutes</td>
-                        <td className="p-2" colSpan={1}>Total Calories = <br />
-                            1050 calories</td>
-                    </tr>
-                </tbody>
+                {
+                    cook.map((cooking,idx)=><SideBarCooking cooking={cooking} idx={idx}></SideBarCooking>)
+                    
+                }
+                <Count timeCount={timeCount} caloriesCount={caloriesCount}></Count>
             </table>
 
+            <ToastContainer></ToastContainer>
         </div>
     );
 };
